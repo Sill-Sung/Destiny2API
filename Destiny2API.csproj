@@ -12,6 +12,8 @@
   </ItemGroup>
 
   <ItemGroup>
+    <ProjectReference Include="..\Bungie\Bungie.csproj" />
+    <ProjectReference Include="..\Destiny\Destiny.csproj" />
     <ProjectReference Include="..\GroupsV2\GroupsV2.csproj" />
   </ItemGroup>
 
