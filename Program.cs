@@ -15,11 +15,12 @@ namespace Destiny2API
 
         public Program()
         {
-            var client = new HttpClient();
+            this.client = new HttpClient();
 
             client.DefaultRequestHeaders.Add("X-API-Key", x_api_key);
             
             ClanUtil clanUtil = new ClanUtil(client);
+
             ClanInfo clanInfo = clanUtil.GetClanInfo("어딜 내놔도 좀");
         }
 

@@ -4,7 +4,9 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-using GroupsV2.Container;
+using Newtonsoft.Json.Linq;
+
+using GroupsV2.Data.Containers;
 using GroupsV2.Enums;
 
 namespace Destiny2API.Clan
@@ -35,21 +37,21 @@ namespace Destiny2API.Clan
             string content = response.Content.ReadAsStringAsync().Result;
             dynamic content_json = Newtonsoft.Json.JsonConvert.DeserializeObject(content);
 
+            JObject jo_detail = content_json.Response.detail;
 
             ClanInfo clanInfo = new ClanInfo();
 
-            clanInfo.Info.GroupId = content_json.Response.detail.groupId;
-            clanInfo.Info.Name = content_json.Response.detail.name;
-            clanInfo.Info.GroupType = content_json.Response.detail.groupType;
-
-
+            clanInfo.Info = Newtonsoft.Json.JsonConvert.DeserializeObject<GroupV2>(jo_detail.ToString());
+            clanInfo.ClanId = clanInfo.Info.GroupId;
+            clanInfo.MemberCount = clanInfo.Info.MemberCount;
+            clanInfo.Name = clanInfo.Info.Name;
 
             return clanInfo;
         }
 
-        public List<GroupUserInfo> GetClanMembersInfo(int clanId)
+        public List<GroupUserInfoBase> GetClanMembersInfo(long clanId)
         {
-            List < GroupUserInfo > clanMembers = new List < GroupUserInfo >();
+            List <GroupUserInfoBase> clanMembers = new List <GroupUserInfoBase>();
 
             string url = $"http://www.bungie.net/platform/GroupV2/{clanId}/Members/";
 
@@ -57,11 +59,13 @@ namespace Destiny2API.Clan
             string content = response.Content.ReadAsStringAsync().Result;
             dynamic content_json = Newtonsoft.Json.JsonConvert.DeserializeObject(content);
 
-            int totalResults = content_json.Response.totalResults;
+            JArray results = content_json.Response.results;
 
-            for (int i = 0; i < totalResults; i++)
+            foreach (JObject result in results)
             {
-                GroupUserInfo clanMember = new GroupUserInfo();
+                GroupUserInfoBase clanMember = new GroupUserInfoBase();
+
+                clanMember = Newtonsoft.Json.JsonConvert.DeserializeObject<GroupUserInfoBase>(result.ToString());
 
                 clanMembers.Add(clanMember);
             }

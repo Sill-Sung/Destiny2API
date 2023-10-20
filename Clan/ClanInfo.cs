@@ -4,7 +4,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-using GroupsV2.Container;
+using GroupsV2.Data.Containers;
 using GroupsV2.Enums;
 
 namespace Destiny2API.Clan
@@ -12,21 +12,24 @@ namespace Destiny2API.Clan
     internal class ClanInfo
     {
         GroupV2 info;
-        int clanId;
+        long clanId;
         string name;
         string callSign;
         int memberCount = 0;
-        List<GroupUserInfo> clanMembers = null;
+        List<GroupUserInfoBase> clanMembers = null;
 
         public ClanInfo()
         {
             Info = new GroupV2();
-            ClanMembers = new List<GroupUserInfo>();
+            ClanMembers = new List<GroupUserInfoBase>();
         }
 
-        public int ClanId { get => clanId; set => clanId = value; }
+        public long ClanId { get => clanId; set => clanId = value; }
 
-        public List<GroupUserInfo> ClanMembers { get => clanMembers; set => clanMembers = value; }
+        public List<GroupUserInfoBase> ClanMembers { get => clanMembers; set => clanMembers = value; }
         public GroupV2 Info { get => info; set => info = value; }
+        public int MemberCount { get => memberCount; set => memberCount = value; }
+        public string CallSign { get => callSign; set => callSign = value; }
+        public string Name { get => name; set => name = value; }
     }
 }
